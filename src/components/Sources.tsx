@@ -7,15 +7,15 @@ interface Props {
 
 export default function Sources({ data }: Props) {
   return (
-    <Section id="sources">
-      <p className="section-label">07 — Sources & Methodology</p>
-      <h2 className="section-title">Where this data comes from</h2>
-      <p className="section-subtitle">
+    <Section id="sources" accent="#00E676">
+      <p className="section-label" data-animate>07 — Sources & Methodology</p>
+      <h2 className="section-title" data-animate>Where this data comes from</h2>
+      <p className="section-subtitle" data-animate>
         Every claim on this page is traceable to a published source. We list them
         here for verification.
       </p>
 
-      <ul className="sources-list">
+      <ul className="sources-list" data-animate>
         {data.sources.map((s, i) => (
           <li key={i} className="source-item">
             <div className="source-name">
@@ -28,7 +28,7 @@ export default function Sources({ data }: Props) {
         ))}
       </ul>
 
-      <div className="transparency-statement">
+      <div className="transparency-statement" data-animate>
         <h3>Transparency Statement</h3>
         <p>
           VaxPlain is an independent informational resource. Content is curated from

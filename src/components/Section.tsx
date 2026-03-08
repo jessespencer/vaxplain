@@ -1,20 +1,21 @@
-import { ReactNode } from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import type { ReactNode } from 'react';
+import { useGSAPScrollReveal } from '../hooks/useGSAPScrollReveal';
 
 interface SectionProps {
   id: string;
-  dark?: boolean;
+  accent?: string;
   children: ReactNode;
 }
 
-export default function Section({ id, dark, children }: SectionProps) {
-  const { ref, visible } = useScrollReveal(0.08);
+export default function Section({ id, accent = '#2962FF', children }: SectionProps) {
+  const containerRef = useGSAPScrollReveal();
 
   return (
     <section
       id={id}
-      ref={ref as React.RefObject<HTMLElement>}
-      className={`section${dark ? ' section--dark' : ''}${visible ? ' visible' : ''}`}
+      ref={containerRef as React.RefObject<HTMLElement>}
+      className="section"
+      style={{ '--section-accent': accent } as React.CSSProperties}
     >
       <div className="section-inner">{children}</div>
     </section>

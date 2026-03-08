@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -5,9 +6,14 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  CartesianGrid,
 } from 'recharts';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { VaccineData } from '../data/vaccines';
 import Section from './Section';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   data: VaccineData;
@@ -35,6 +41,23 @@ function CustomTooltip({ active, payload, label }: any) {
 }
 
 export default function DiseaseHistory({ data }: Props) {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartActive, setChartActive] = useState(false);
+
+  useEffect(() => {
+    const el = chartRef.current;
+    if (!el) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: el,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => setChartActive(true),
+    });
+
+    return () => trigger.kill();
+  }, []);
+
   const comparisonData = [
     {
       period: 'Pre-Vaccine',
@@ -54,13 +77,13 @@ export default function DiseaseHistory({ data }: Props) {
   ).toFixed(1);
 
   return (
-    <Section id="history">
-      <p className="section-label">05 — Disease History</p>
-      <h2 className="section-title">The arc of {data.disease}</h2>
-      <p className="section-subtitle">{data.historicalContext}</p>
+    <Section id="history" accent="#D500F9">
+      <p className="section-label" data-animate>05 — Disease History</p>
+      <h2 className="section-title" data-animate>The arc of {data.disease}</h2>
+      <p className="section-subtitle" data-animate>{data.historicalContext}</p>
 
       {/* Timeline */}
-      <div className="grid-2">
+      <div className="grid-2" data-animate>
         <div>
           <p className="chart-title">Timeline</p>
           <div className="timeline">
@@ -74,27 +97,40 @@ export default function DiseaseHistory({ data }: Props) {
         </div>
 
         {/* Comparison Chart */}
-        <div>
+        <div ref={chartRef}>
           <p className="chart-title">
             Pre-Vaccine vs. Post-Vaccine Impact
           </p>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={comparisonData} barCategoryGap="30%">
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
               <XAxis
                 dataKey="period"
-                tick={{ fontSize: 12, fill: '#555' }}
-                axisLine={{ stroke: '#e0e0e0' }}
+                tick={{ fontSize: 12, fill: '#8a8a8a' }}
+                axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: '#555' }}
-                axisLine={{ stroke: '#e0e0e0' }}
+                tick={{ fontSize: 11, fill: '#8a8a8a' }}
+                axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
                 tickLine={false}
                 tickFormatter={formatNumber}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="Cases" fill="rgba(41, 98, 255, 0.7)" />
-              <Bar dataKey="Deaths" fill="rgba(229, 57, 53, 0.7)" />
+              <Bar
+                dataKey="Cases"
+                fill="rgba(213, 0, 249, 0.5)"
+                stroke="#D500F9"
+                strokeWidth={1}
+                isAnimationActive={chartActive}
+              />
+              <Bar
+                dataKey="Deaths"
+                fill="rgba(255, 23, 68, 0.5)"
+                stroke="#FF1744"
+                strokeWidth={1}
+                isAnimationActive={chartActive}
+              />
             </BarChart>
           </ResponsiveContainer>
 
@@ -120,7 +156,7 @@ export default function DiseaseHistory({ data }: Props) {
               <div className="comparison-detail">
                 cases &nbsp;/&nbsp; {formatNumber(data.postVaccine.deaths)} deaths
                 <br />
-                <strong style={{ color: '#1B5E20' }}>{reduction}% reduction</strong>
+                <strong style={{ color: '#00E676' }}>{reduction}% reduction</strong>
               </div>
             </div>
           </div>

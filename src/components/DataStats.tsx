@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -8,8 +9,12 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { VaccineData } from '../data/vaccines';
 import Section from './Section';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   data: VaccineData;
@@ -43,17 +48,34 @@ function CustomTooltip({ active, payload, label }: any) {
 }
 
 export default function DataStats({ data }: Props) {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [chartActive, setChartActive] = useState(false);
+
+  useEffect(() => {
+    const el = chartRef.current;
+    if (!el) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: el,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => setChartActive(true),
+    });
+
+    return () => trigger.kill();
+  }, []);
+
   return (
-    <Section id="data">
-      <p className="section-label">03 — Current Data & Statistics</p>
-      <h2 className="section-title">What the numbers say</h2>
-      <p className="section-subtitle">
+    <Section id="data" accent="#FF6D00">
+      <p className="section-label" data-animate>03 — Current Data & Statistics</p>
+      <h2 className="section-title" data-animate>What the numbers say</h2>
+      <p className="section-subtitle" data-animate>
         Efficacy rates, adverse events, and vaccination trends — drawn from
         clinical trials and real-world surveillance data.
       </p>
 
       {/* Efficacy */}
-      <div style={{ marginBottom: 48 }}>
+      <div style={{ marginBottom: 48 }} data-animate>
         <p className="chart-title">Efficacy</p>
         {data.efficacy.map((e, i) => (
           <div key={i} className="efficacy-row">
@@ -85,7 +107,7 @@ export default function DataStats({ data }: Props) {
       </div>
 
       {/* Adverse Events */}
-      <div style={{ marginBottom: 48 }}>
+      <div style={{ marginBottom: 48 }} data-animate>
         <p className="chart-title">Adverse Events</p>
         <div className="table-wrapper">
           <table>
@@ -116,42 +138,42 @@ export default function DataStats({ data }: Props) {
       </div>
 
       {/* Vaccination Rate Chart */}
-      <div className="chart-container">
+      <div className="chart-container" ref={chartRef} data-animate>
         <p className="chart-title">Vaccination Coverage vs. Reported Cases</p>
         <ResponsiveContainer width="100%" height={360}>
           <ComposedChart data={data.vaccinationRates}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
             <XAxis
               dataKey="year"
-              tick={{ fontSize: 11, fill: '#555' }}
-              axisLine={{ stroke: '#e0e0e0' }}
+              tick={{ fontSize: 11, fill: '#8a8a8a' }}
+              axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
               tickLine={false}
             />
             <YAxis
               yAxisId="left"
-              tick={{ fontSize: 11, fill: '#555' }}
-              axisLine={{ stroke: '#e0e0e0' }}
+              tick={{ fontSize: 11, fill: '#8a8a8a' }}
+              axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
               tickLine={false}
               domain={[0, 100]}
               label={{
                 value: 'Coverage %',
                 angle: -90,
                 position: 'insideLeft',
-                style: { fontSize: 11, fill: '#555' },
+                style: { fontSize: 11, fill: '#8a8a8a' },
               }}
             />
             <YAxis
               yAxisId="right"
               orientation="right"
-              tick={{ fontSize: 11, fill: '#555' }}
-              axisLine={{ stroke: '#e0e0e0' }}
+              tick={{ fontSize: 11, fill: '#8a8a8a' }}
+              axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
               tickLine={false}
               tickFormatter={formatNumber}
               label={{
                 value: 'Cases',
                 angle: 90,
                 position: 'insideRight',
-                style: { fontSize: 11, fill: '#555' },
+                style: { fontSize: 11, fill: '#8a8a8a' },
               }}
             />
             <Tooltip content={<CustomTooltip />} />
@@ -159,25 +181,27 @@ export default function DataStats({ data }: Props) {
               yAxisId="right"
               dataKey="cases"
               name="Cases"
-              fill="rgba(229, 57, 53, 0.15)"
-              stroke="#E53935"
+              fill="rgba(255, 109, 0, 0.2)"
+              stroke="#FF6D00"
               strokeWidth={1}
+              isAnimationActive={chartActive}
             />
             <Line
               yAxisId="left"
               type="monotone"
               dataKey="rate"
               name="Coverage"
-              stroke="#2962FF"
+              stroke="#FF6D00"
               strokeWidth={2}
-              dot={{ fill: '#2962FF', r: 3, strokeWidth: 0 }}
+              dot={{ fill: '#FF6D00', r: 3, strokeWidth: 0 }}
               activeDot={{ r: 5, strokeWidth: 0 }}
+              isAnimationActive={chartActive}
             />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="last-updated">
+      <div className="last-updated" data-animate>
         Data sources: CDC, WHO, VAERS, UKHSA &nbsp;|&nbsp; Last updated:{' '}
         {data.lastUpdated}
       </div>

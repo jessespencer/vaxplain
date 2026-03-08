@@ -7,15 +7,15 @@ interface Props {
 
 export default function Purpose({ data }: Props) {
   return (
-    <Section id="purpose">
-      <p className="section-label">01 — Purpose</p>
-      <h2 className="section-title">Why this vaccine exists</h2>
-      <p className="section-subtitle">
+    <Section id="purpose" accent="#00E5FF">
+      <p className="section-label" data-animate>01 — Purpose</p>
+      <h2 className="section-title" data-animate>Why this vaccine exists</h2>
+      <p className="section-subtitle" data-animate>
         Understanding what a vaccine targets, how it works, and who it's designed
         to protect.
       </p>
 
-      <div className="grid-3">
+      <div className="grid-3" data-animate>
         <div className="card">
           <p className="card-label">Target</p>
           <h3 className="card-title">{data.disease}</h3>

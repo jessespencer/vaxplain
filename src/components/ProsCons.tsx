@@ -34,15 +34,15 @@ function PointCard({ point }: { point: ProConPoint }) {
 
 export default function ProsCons({ data }: Props) {
   return (
-    <Section id="debate" dark>
-      <p className="section-label">06 — The Debate</p>
-      <h2 className="section-title">Arguments for and against</h2>
-      <p className="section-subtitle">
+    <Section id="debate" accent="#FFEA00">
+      <p className="section-label" data-animate>06 — The Debate</p>
+      <h2 className="section-title" data-animate>Arguments for and against</h2>
+      <p className="section-subtitle" data-animate>
         Both sides presented with equal weight. Each point is labeled by its
         evidence basis. No editorializing — draw your own conclusions.
       </p>
 
-      <div className="grid-2">
+      <div className="grid-2" data-animate>
         <div>
           <div className="proscons-header">Arguments For Vaccination</div>
           {data.pros.map((p, i) => (

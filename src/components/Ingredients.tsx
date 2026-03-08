@@ -7,15 +7,15 @@ interface Props {
 
 export default function Ingredients({ data }: Props) {
   return (
-    <Section id="ingredients" dark>
-      <p className="section-label">02 — Ingredients</p>
-      <h2 className="section-title">What's in the vaccine</h2>
-      <p className="section-subtitle">
+    <Section id="ingredients" accent="#76FF03">
+      <p className="section-label" data-animate>02 — Ingredients</p>
+      <h2 className="section-title" data-animate>What's in the vaccine</h2>
+      <p className="section-subtitle" data-animate>
         Full ingredient list with roles, safety classifications, and neutral
         context for commonly scrutinized components.
       </p>
 
-      <div className="table-wrapper">
+      <div className="table-wrapper ingredients-grid-bg" data-animate>
         <table>
           <thead>
             <tr>
@@ -49,10 +49,10 @@ export default function Ingredients({ data }: Props) {
         </table>
       </div>
 
-      <p className="last-updated" style={{ marginTop: 24 }}>
+      <p className="last-updated" style={{ marginTop: 24 }} data-animate>
         Ingredients with a{' '}
-        <span style={{ borderLeft: '3px solid var(--color-accent)', paddingLeft: 8 }}>
-          blue indicator
+        <span style={{ borderLeft: '3px solid var(--section-accent)', paddingLeft: 8 }}>
+          green indicator
         </span>{' '}
         are commonly scrutinized — hover for neutral context.
       </p>

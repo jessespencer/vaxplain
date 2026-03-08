@@ -9,15 +9,19 @@ import ThreatLevel from './components/ThreatLevel';
 import DiseaseHistory from './components/DiseaseHistory';
 import ProsCons from './components/ProsCons';
 import Sources from './components/Sources';
+import SectionIndicator from './components/SectionIndicator';
+import { useActiveSection } from './hooks/useActiveSection';
 import './App.css';
 
 function App() {
   const [selected, setSelected] = useState('covid-19');
   const data = vaccines[selected];
+  const { active } = useActiveSection();
 
   return (
     <>
       <Nav />
+      <SectionIndicator active={active} />
       <Hero selected={selected} onSelect={setSelected} />
       <Purpose data={data} />
       <Ingredients data={data} />
